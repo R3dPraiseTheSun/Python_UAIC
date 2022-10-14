@@ -12,4 +12,5 @@ __Year__: 2022-2023
 ## (Shortcuts) Currently available Labs:
 ### [Lab1](https://github.com/R3dPraiseTheSun/Python_UAIC/tree/main/Python/Lab1)
 ### [Lab2](https://github.com/R3dPraiseTheSun/Python_UAIC/tree/main/Python/Lab2)
+### [Lab3](https://github.com/R3dPraiseTheSun/Python_UAIC/tree/main/Python/Lab3)
 ### _TODO: Update shortcut list until I have every Lab in here_
