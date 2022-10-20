@@ -191,7 +191,10 @@ def ex12():
         word_dict = {}
         for element in input_list:
             if element[-2:] not in word_dict: word_dict.update({element[-2:]: []})
-            word_dict[element[-2:]].append(element)
+            try:
+                word_dict[element[-2:]].index(element)
+            except ValueError: 
+                word_dict[element[-2:]].append(element)
 
         result_list = []
         for word in word_dict:
@@ -199,6 +202,6 @@ def ex12():
 
         return result_list
 
-    print(group_by_rhyme(['ana', 'banana', 'carte', 'arme', 'parte']))
+    print(group_by_rhyme(['ana', 'banana', 'banana', 'carte', 'arme', 'parte']))
 
 ex12()
