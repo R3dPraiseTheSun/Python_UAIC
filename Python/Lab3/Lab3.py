@@ -132,13 +132,14 @@ def ex8():
         next_key = 'start'
         sequence = []
         while(not found_loop):
-            if(not next_key == mapping.get(next_key) and not mapping.get(next_key) == 'start'):
+            if(not next_key == mapping.get(next_key) and not mapping.get(next_key) == 'start' and mapping.get(next_key) not in sequence):
                 next_key = mapping.get(next_key)
                 sequence.append(next_key)
             else: found_loop = True
         return sequence
 
     print(loop({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': '2', '2': '2', 'y': 'start'}))
+    print(loop({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': 'a', '2': '2', 'y': 'start'}))
     print(loop({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': 'x', '2': 'y', 'y': 'start'}))
 
 def ex9():
