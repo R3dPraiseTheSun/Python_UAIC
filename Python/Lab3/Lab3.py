@@ -1,6 +1,5 @@
 import re
 
-#Ex.1:
 def ex1():
     def function(list_a, list_b):
             list_a = set(list_a)
@@ -12,7 +11,6 @@ def ex1():
                 list_b.difference(list_a)
             ]
     print(function(range(1,20,4), range(13,30,2)))
-# ex1()
 
 def ex2():
     def occur_dict(string):
@@ -25,9 +23,9 @@ def ex2():
         print(occurances_dict)
 
     occur_dict("Ana has apples.")
-#ex2()
 
-def ex3():
+def ex3(reccursive = False):
+    # make a big list, sort it, find how many instances of one item we have
     def compare_dicts(dict_A: dict, dict_B: dict) -> bool:
         item_list = []
         for key in dict_A: item_list.append([key, dict_A[key]])
@@ -39,9 +37,26 @@ def ex3():
                 print(el, 'not ok')
                 return False
         return True
-    print(compare_dicts({'A':10, 'B':11, 'C':12, 'D0':{'D1':1111, 'D2':22}}, {'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}))
-    print(compare_dicts({'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}, {'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}))
-#ex3()
+    # raccursive way of iterating through dict
+    def compare_dicts_reccursive(dict_A, dict_B):
+        if type(dict_A) != type(dict_B): return False, f'first element is {type(dict_A)} while the second element is {type(dict_B)}'
+        if type(dict_A) is dict:
+            for label_1, label_2 in zip(sorted(dict_A.keys()), sorted(dict_B.keys())):
+                if label_1 != label_2:
+                    return False, f'{label_1} is different than {label_2}'
+                verify_equal = compare_dicts_reccursive(dict_A[label_1], dict_B[label_2])
+                if not verify_equal[0]: return False, f'{dict_A[label_1]} is different than {dict_B[label_2]}'
+            return True, 'Dicts are equal'
+        elif dict_A == dict_B: 
+            return True, f'{dict_A} is ok'
+        return False, f'{dict_A} is not ok'
+
+    if reccursive :
+        print(compare_dicts_reccursive({'A':10, 'B':11, 'C':12, 'D0':{'D1':1111, 'D2':22}}, {'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}))
+        print(compare_dicts_reccursive({'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}, {'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}))
+    else:
+        print(compare_dicts({'A':10, 'B':11, 'C':12, 'D0':{'D1':1111, 'D2':22}}, {'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}))
+        print(compare_dicts({'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}, {'A':10, 'B':11, 'C':12,'D0':{'D1':13, 'E':14, 'F':[15,16]}}))
 
 def ex4():
     def build_xml_element(tag, content, **kwargs):
@@ -51,7 +66,6 @@ def ex4():
         return f'<{tag} href={href}_class={_class}id={id}>{content}</{tag}>'
     
     print(build_xml_element ("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid "))
-#ex4()
 
 def ex5():
     def validate_dict(validation_rules: set, targeted_dict: dict):
@@ -87,7 +101,6 @@ def ex5():
         {("key1", "", "inside", ""), ("key2", "start", "middle", "winter")},
         {"key1": "come inside, it's too cold out", "key2": "start in the middle of winter"}
     ))
-#ex5()
 
 def ex6():
     def func(list_a):
@@ -99,7 +112,6 @@ def ex6():
                 duplicate_number += (list_a.count(el)-1)
         return len(set(list_a)), duplicate_set, duplicate_number
     print(func([1, 2, 3, 4, 1, 2, 5, 7, 10, 4, 10, 5, 1, 12]))
-#ex6()
 
 def ex7():
     def func(*sets):
@@ -113,7 +125,6 @@ def ex7():
         print(operation_dict)
 
     print(func({1,2}, {2,3,6}, {4,6,9,11}, {4,5,6}))
-#ex7()
 
 def ex8():
     def loop(mapping: dict):
@@ -129,7 +140,6 @@ def ex8():
 
     print(loop({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': '2', '2': '2', 'y': 'start'}))
     print(loop({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': 'x', '2': 'y', 'y': 'start'}))
-#ex8()
 
 def ex9():
     def my_function(*args, **kwargs):
@@ -139,4 +149,3 @@ def ex9():
         return len(duplicates)
 
     print(my_function(1, 2, 3, 4, x=1, y=2, z=3, w=5))
-ex9()
