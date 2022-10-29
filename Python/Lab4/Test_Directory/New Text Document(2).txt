@@ -1,4 +1,4 @@
-C:\Users\paion\ananas - Copy (2).jpg
-C:\Users\paion\ananas - Copy.png
-C:\Users\paion\ananas .txt
-C:\Users\paion\ananas.bmp
+C:\Users\paion\OneDrive\Documente\GitHub\Python_UAIC\Python\Lab4\ananas - Copy (2).jpg
+C:\Users\paion\OneDrive\Documente\GitHub\Python_UAIC\Python\Lab4\ananas - Copy.png
+C:\Users\paion\OneDrive\Documente\GitHub\Python_UAIC\Python\Lab4\ananas .txt
+C:\Users\paion\OneDrive\Documente\GitHub\Python_UAIC\Python\Lab4\ananas.bmp
