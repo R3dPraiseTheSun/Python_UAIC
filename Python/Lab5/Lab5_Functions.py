@@ -93,3 +93,20 @@ def augment_function(function, decorators):
     for decorator in decorators:
         result_function = lambda *args, **kwargs: print(f'Arguments are: {args}, {kwargs} and will return {decorator(function)}')
     return result_function
+
+summ = lambda a,b:a+b
+prod = lambda a,b:a*b
+pow = lambda a,b:a**b
+
+#Ex9:
+def f9(**kwargs):
+    tuples_list = kwargs.get('pairs')
+    result_list = []
+    for tuple in tuples_list:
+        res_dict = {
+            'sum': summ(tuple[0], tuple[1]),
+            'prod': prod(tuple[0], tuple[1]),
+            'pow': pow(tuple[0], tuple[1])
+        }
+        result_list.append(res_dict)
+    return result_list

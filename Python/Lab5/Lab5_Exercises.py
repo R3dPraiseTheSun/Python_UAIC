@@ -43,3 +43,5 @@ x = augmented_multiply_by_three(10)
 print('Ex8: c)')
 decorated_function = lb5.augment_function(lb5.add_numbers, [lb5.print_arguments, lb5.multiply_output]) 
 x = decorated_function(3, 4)
+
+print('Ex9:', lb5.f9(pairs = [(5, 2), (19, 1), (30, 6), (2, 2)]))
