@@ -11,3 +11,6 @@ def process_items(x: int) -> int:
     while not is_prime(x + 1):
         x += 1
     return x + 1
+
+if __name__ == "__main__":
+    print(process_items(int(input('Give number: '))))
