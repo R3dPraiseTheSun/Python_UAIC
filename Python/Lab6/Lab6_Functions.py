@@ -7,7 +7,7 @@ def extract_words(input_text: str) -> List[str]:
     Write a function that extracts the words from a given text as a parameter. A word is defined as a sequence of
     alpha-numeric characters.
     """
-    return re.findall(r"[a-zA-Z0-9]+", input_text)
+    return re.findall(r"\w+", input_text)
 
 
 def ex_2(regex: str, input_text: str, x: int) -> List[str]:
@@ -18,17 +18,18 @@ def ex_2(regex: str, input_text: str, x: int) -> List[str]:
     return [i for i in re.findall(regex, input_text) if len(i) == x]
 
 
-def ex_3(input_text: str, regex_list: List[str]) -> List[str]:
+def ex_3(input_text_list: list, regex_list: List[str]) -> List[str]:
     """
-    Write a function that receives as a parameter a string of text characters and a list of regular expressions and
-    returns a list of strings that match on at least one regular expression given as a parameter.
+    Write a function that receives two parameters: a list of strings and a list of regular expressions.
+    The function will return a list of the strings that match on at least one regular expression from the list given as parameter.
     """
     match_list = []
-    for i in regex_list:
-        x = re.findall(i, input_text)
-        for j in x:
-            if j not in match_list:
-                match_list.append(j)
+    for input_text in input_text_list:
+        for regex_el in regex_list:
+            found_elements = re.findall(regex_el, input_text)
+            for element in found_elements:
+                if element not in match_list:
+                    match_list.append(element)
     return match_list
 
 
@@ -43,7 +44,7 @@ def ex_4(path: str, attributes: dict) -> List[str]:
         search_string = r"(<(\w+)" + r"".join(
             [" {key}=\"{value}\"".format(key=key, value=value) for key, value in attributes.items()]
         ) + r">[^</\2>]*</\2>)"
-        print(search_string)
+        #print(search_string)
         match_list += [x[0] for x in re.findall(search_string, xml_data)]
     return match_list
 
@@ -59,7 +60,7 @@ def ex_5(path: str, attributes: dict) -> List[str]:
         search_string = r"(<(\w+) [^>]*(" + r"|".join(
             ["{key}=\"{value}\"".format(key=key, value=value) for key, value in attributes.items()]
         ) + r")[^>]*>[^(<\2>)]*</\2>)"
-        print(search_string)
+        #print(search_string)
         match_list += [x[0] for x in re.findall(search_string, xml_data)]
     return match_list
 
@@ -124,7 +125,7 @@ def ex_7(input_text: str) -> bool:
     control_digit = get_control_digit(input_text[:-1])
     regex_string = r"^" + match_first_digit + match_year + match_month + match_day + match_county + random_digits + \
                    control_digit + r"$"
-    print(regex_string)
+    #print(regex_string)
     return bool(re.match(regex_string, input_text))
 
 
