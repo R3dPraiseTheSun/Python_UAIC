@@ -67,6 +67,7 @@ def ex_5(path: str, attributes: dict) -> List[str]:
 
 def censor_text(input_text: str) -> str:
     input_text = input_text.group(0)
+
     return "".join([input_text[i] if i % 2 == 0 else "*" for i in range(len(input_text))])
 
 
@@ -75,7 +76,7 @@ def ex_6(input_text: str) -> str:
     Write a function that, for a text given as a parameter, censures words that begin and end with vowels. Censorship
     means replacing characters from odd positions with *.
     """
-    return re.sub(r"(a|e|i|o|u)\w+(a|e|i|o|u)", censor_text, input_text)
+    return re.sub(r"\b[aeiou](\w*[aeiou])?\b", censor_text, input_text)
 
 
 def get_days_from_month_regex(year: str, month: str) -> str:
@@ -123,8 +124,7 @@ def ex_7(input_text: str) -> bool:
     match_county = r"(0[1-9]|[1-3]\d|4[0-6]|5[1-2])"
     random_digits = r"(00[1-9]|0[1-9]\d|\d\d\d)"
     control_digit = get_control_digit(input_text[:-1])
-    regex_string = r"^" + match_first_digit + match_year + match_month + match_day + match_county + random_digits + \
-                   control_digit + r"$"
+    regex_string = r"^" + match_first_digit + match_year + match_month + match_day + match_county + random_digits + control_digit + r"$"
     #print(regex_string)
     return bool(re.match(regex_string, input_text))
 

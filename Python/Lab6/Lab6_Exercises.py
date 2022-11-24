@@ -17,7 +17,7 @@ print('Ex4:',ex_4("example.xml", {"class": "url", "name": "url-form", "data-id":
 print('Ex5:',ex_5("example.xml", {"class": "url", "name": "url-form", "data-id": "item"}))
 
 # Ex_6
-print('Ex6:',ex_6("absefgei ara ara cha"))
+print('Ex6:',ex_6("absefgei ara ananas cha"))
 
 # Ex_7
 print('Ex7:',ex_7("1730110155203"))
