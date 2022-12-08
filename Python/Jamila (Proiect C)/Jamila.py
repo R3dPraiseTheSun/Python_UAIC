@@ -10,13 +10,12 @@ from tkinter import ttk
 # region constants
 
 SHOPPING_CART_FILE_NAME = 'shopping_cart.json'
-SHOPPING_CART_FILE_PATH = os.path.join(
-    os.path.dirname(__file__), SHOPPING_CART_FILE_NAME)
+SHOPPING_CART_FILE_PATH = os.path.join(os.path.dirname(__file__), SHOPPING_CART_FILE_NAME)
 
 # endregion
 
 
-class JamilaCrawler:
+class JamilaC:
 
     def __init__(self):
         self.data = {}
@@ -29,17 +28,6 @@ class JamilaCrawler:
         recipe_name = recipe_name.replace("-reteta-video/", "")
         recipe_name = recipe_name.replace("-", " ")
         return recipe_name
-
-    def convertFractionToFloat(self, string):
-        elements = string.split('/')
-        return float(int(elements[0]) / int(elements[1]))
-
-    def getMaxAmountFromRange(self, string):
-        elements = string.split('-')
-        return int(elements[1])
-
-    def validateAmount(self, amount):
-        return re.search("^[0-9]+$", amount)
 
     def loadJSON(self):
         try:
@@ -75,12 +63,6 @@ class JamilaCrawler:
             recipes_list += "\n"
             print(recipes_list)
 
-    def checkForIngredient(self, ingredient_name):
-        return any(ingredient['name'] == ingredient_name for ingredient in self.data['items'])
-
-    def checkForRecipe(self, recipe_name):
-        return any(recipe['name'] == recipe_name for recipe in self.data['recipes'])
-
     def getIngredientIndex(self, ingredient_name):
         for index in range(0, len(self.data['items'])):
             if self.data['items'][index]['name'] == ingredient_name:
@@ -95,13 +77,11 @@ class JamilaCrawler:
     def validateIngredientAmount(self, amount):
         amount_ingredient = 1
         if amount is not None:
-            if not self.validateAmount(amount.text.lower().strip()):
+            if not re.search("^[0-9]+$", amount.text.lower().strip()):
                 if '/' in amount.text:
-                    amount_ingredient = self.convertFractionToFloat(
-                        amount.text.lower().strip())
+                    amount_ingredient = float(int(amount.text.lower().strip().split('/')[0]) / int(amount.text.lower().strip().split('/')[1]))
                 if '-' in amount.text:
-                    amount_ingredient = self.getMaxAmountFromRange(
-                        amount.text.lower().strip())
+                    amount_ingredient = int(amount.text.lower().strip()[1])
             else:
                 amount_ingredient = int(amount.text.lower().strip())
         return amount_ingredient
@@ -130,26 +110,26 @@ class JamilaCrawler:
             URL = sys.argv[1]
 
         page = requests.get(URL)
-        soup = BeautifulSoup(page.content, "html.parser")
+        html_parser = BeautifulSoup(page.content, "html.parser")
 
-        ingredients = soup.find_all("li", {"class": "wprm-recipe-ingredient"})
+        ingredients_element = html_parser.find_all("li", {"class": "wprm-recipe-ingredient"})
 
         items_list = []
 
-        for ingredient in ingredients:
-            amount = ingredient.find(
+        for ingredient in ingredients_element:
+            amount_data = ingredient.find(
                 "span", class_="wprm-recipe-ingredient-amount")
-            unit = ingredient.find(
+            unit_data = ingredient.find(
                 "span", class_="wprm-recipe-ingredient-unit")
-            name = ingredient.find(
+            name_data = ingredient.find(
                 "span", class_="wprm-recipe-ingredient-name")
-            note = ingredient.find(
+            note_data = ingredient.find(
                 "span", class_="wprm-recipe-ingredient-notes")
 
-            name_ingredient = self.validateIngredientName(name)
-            amount_ingredient = self.validateIngredientAmount(amount)
-            unit_ingredient = self.validateIngredientUnit(unit)
-            note_ingredient = self.validateIngredientNote(note)
+            name_ingredient = self.validateIngredientName(name_data)
+            amount_ingredient = self.validateIngredientAmount(amount_data)
+            unit_ingredient = self.validateIngredientUnit(unit_data)
+            note_ingredient = self.validateIngredientNote(note_data)
 
             item = {
                 "name": name_ingredient,
@@ -179,7 +159,7 @@ class JamilaCrawler:
         for item in items_list:
             update_index = -1
             if (self.data != {}):
-                if (self.checkForIngredient(item['name'])):
+                if (any(ingredient['name'] == item['name'] for ingredient in self.data['items'])):
                     update_index = self.getIngredientIndex(item['name'])
 
             if update_index != -1:
@@ -198,7 +178,7 @@ class JamilaCrawler:
 
     def addRecipeToCart(self, recipe_name):
         if (self.data != {}):
-            if not self.checkForRecipe(recipe_name):
+            if not any(recipe['name'] == recipe_name for recipe in self.data['recipes']):
                 item = {'name': recipe_name}
                 self.data['recipes'].append(item)
 
@@ -240,41 +220,7 @@ class JamilaCrawler:
             if self.data['items'][update_index]['unit'].lower() == "lingurita cu varf":
                 self.data['items'][update_index]['unit'] = "lingurite cu varf"
 
-    def getJsonString(self):
-        return_string = ""
-        if 'items' in self.data:
-            string = ""
-            for item in self.data['items']:
-                string += "Name: " + item['name']
-                if item['amount'] != "" and item['amount'] > 0:
-                    string += " - Amount: " + str(item['amount'])
-                if item['unit'] != "":
-                    string += " - Unit: " + item['unit']
-                if item['note'] != "":
-                    string += " - Note: " + item['note']
-                string += "\n"
-            return_string += string
-        if 'recipes' in self.data:
-            recipes_list = "Recipes: "
-            for i in range(0, len(self.data['recipes'])):
-                if (i == len(self.data['recipes']) - 1):
-                    recipes_list += self.data['recipes'][i]['name']
-                else:
-                    recipes_list += self.data['recipes'][i]['name'] + ", "
-            recipes_list += "\n"
-            return_string += recipes_list
-        return return_string
-
-    def initializeInterfaceWithText(self, jc):
-        root = Tk()
-        frm = ttk.Frame(root, padding=10)
-        frm.grid()
-        ttk.Label(frm, text=jc.getJsonString()).grid(column=0, row=0)
-        ttk.Button(frm, text="Quit", command=root.destroy).grid(
-            column=0, row=1)
-        root.mainloop()
-
-    def initializeInterfaceWithTable(self, jc):
+    def initializeInterfaceWithTable(self):
         root = Tk()
         root.title("Shopping List")
 
@@ -284,15 +230,15 @@ class JamilaCrawler:
         main_frame = Frame(root)
         main_frame.pack()
 
-        table = ttk.Treeview(main_frame, height=len(jc.data['items']))
+        table = ttk.Treeview(main_frame, height=len(self.data['items']))
 
         table['columns'] = ('name', 'amount', 'unit', 'note')
 
         table.column("#0", width=0, stretch=NO)
         table.column('name', anchor=CENTER, width=150)
         table.column('amount', anchor=CENTER, width=100)
-        table.column('unit', anchor=CENTER, width=150)
-        table.column('note', anchor=CENTER, width=100)
+        table.column('unit', anchor=CENTER, width=100)
+        table.column('note', anchor=CENTER, width=200)
 
         table.heading("#0", text="", anchor=CENTER)
         table.heading('name', text="Name", anchor=CENTER)
@@ -300,9 +246,9 @@ class JamilaCrawler:
         table.heading('unit', text="Unit", anchor=CENTER)
         table.heading('note', text="Note", anchor=CENTER)
 
-        for i in range(0, len(jc.data['items'])):
+        for i in range(0, len(self.data['items'])):
             table.insert(parent='', index='end', iid=i, text='', values=(
-                jc.data['items'][i]['name'], jc.data['items'][i]['amount'], jc.data['items'][i]['unit'], jc.data['items'][i]['note']))
+                self.data['items'][i]['name'], self.data['items'][i]['amount'], self.data['items'][i]['unit'], self.data['items'][i]['note']))
             if i % 2 == 0:
                 table.item(i, tags='light_gray')
             else:
@@ -315,11 +261,8 @@ class JamilaCrawler:
         root.mainloop()
 
 
-jc = JamilaCrawler()
+jc = JamilaC()
 jc.loadJSON()
-# jc.getIngredientsFromRecipeURL()
-
-jc.initializeInterfaceWithText(jc)
+jc.getIngredientsFromRecipeURL()
 jc.initializeInterfaceWithTable(jc)
-
-# jc.printJSON()
+jc.printJSON()
