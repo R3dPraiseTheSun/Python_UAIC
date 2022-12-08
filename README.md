@@ -18,7 +18,7 @@ __Year__: 2022-2023
 ### [Lab4](https://github.com/R3dPraiseTheSun/Python_UAIC/tree/main/Python/Lab4)
 ### [Lab5](https://github.com/R3dPraiseTheSun/Python_UAIC/tree/main/Python/Lab5)
 ### [Lab6](https://github.com/R3dPraiseTheSun/Python_UAIC/tree/main/Python/Lab6)
-### _TODO: Update shortcut list until I have every Lab in here_
+### [Proiect](https://github.com/R3dPraiseTheSun/Python_UAIC/tree/main/Python/Jamila%20(Proiect%20C))
 
 ## Useful Links:
 ### [Lab page](https://sites.google.com/site/fiipythonprogramming/administrative)
